@@ -68,3 +68,9 @@ class BehaviorExtract(object):
             return self.apirefs[apiname]
         else:
             return ""
+
+    def search_api(self, apiname):
+        """
+        DBから与えられたAPI名を抽出する。
+        """
+        pass
