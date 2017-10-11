@@ -52,3 +52,15 @@ class BehaviorExtract(object):
                     calls_dict[call['time']] = [call['api'], call['arguments'], call['status'], call['return_value']]
 
         return calls_dict
+
+    def get_api_refurl(self, apiname):
+        """
+        与えられたAPI名のMSDNリファレンスへのURLを返す。
+        """
+        apirefs = list(self.db.apiref.find())[0] # MongoDBに合わせたjsonに変更する？
+        #pprint(apirefs)
+
+        if apiname in apirefs:
+            return apirefs[apiname]
+        else:
+            return ""
