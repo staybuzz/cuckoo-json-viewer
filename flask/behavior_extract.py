@@ -63,4 +63,9 @@ class BehaviorExtract(object):
         """
         DBから与えられたAPI名を抽出する。
         """
-        pass
+        # TODO: ちゃんとMongoDBのクエリから取得できるようにしたい
+
+        calls = self.get_behavior()
+        results = [call for call in calls if call['apiname'] == apiname]
+
+        return results
