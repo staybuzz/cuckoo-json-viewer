@@ -52,11 +52,12 @@ class BehaviorExtract(object):
     def get_api_refurl(self, apiname):
         """
         与えられたAPI名のMSDNリファレンスへのURLを返す。
+        手元の辞書になければgoogle検索URLを返す。
         """
-        if apiname in self.apirefs:
+        if (apiname in self.apirefs) and (self.apirefs[apiname]):
             return self.apirefs[apiname]
         else:
-            return ""
+            return "https://www.google.com/search?q=%s" % apiname
 
     def search_api(self, apiname):
         """
