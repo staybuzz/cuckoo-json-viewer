@@ -9,6 +9,7 @@ class BehaviorExtract(object):
         self.connect = MongoClient(dbaddr, dbport)
         # mws DBの取得
         self.db = self.connect.mws
+        self.apirefs = list(self.db.apiref.find())[0] # MongoDBに合わせたjsonに変更する？
 
 
     def get_behavior(self):
@@ -35,9 +36,8 @@ class BehaviorExtract(object):
         # api callsの取得
         calls_path = "behavior.processes.calls"
         calls_all = []
-        calls_dict = {}
 
-        for i in col.find({}, {calls_path+".time":1, calls_path+".api":1, calls_path+".arguments":1, calls_path+".status":1, calls_path+".return_value":1, "behavior.processes.pid":1, "_id":0}):
+        for i in col.find():
             data = i
         
             # for debug
@@ -49,18 +49,22 @@ class BehaviorExtract(object):
                     continue
                 calls = process['calls']
                 for call in calls:
-                    calls_dict[call['time']] = [call['api'], call['arguments'], call['status'], call['return_value']]
+                    calls_all.append({'time': call['time'],
+                                      'category': call['category'],
+                                      'apiname': call['api'],
+                                      'apiurl': self.get_api_refurl(call['api']),
+                                      'arguments': call['arguments'],
+                                      'status': call['status'],
+                                      'return_value': call['return_value']}
+                                    )
 
-        return calls_dict
+        return calls_all
 
     def get_api_refurl(self, apiname):
         """
         与えられたAPI名のMSDNリファレンスへのURLを返す。
         """
-        apirefs = list(self.db.apiref.find())[0] # MongoDBに合わせたjsonに変更する？
-        #pprint(apirefs)
-
-        if apiname in apirefs:
-            return apirefs[apiname]
+        if apiname in self.apirefs:
+            return self.apirefs[apiname]
         else:
             return ""
