@@ -38,7 +38,8 @@ def index():
 def post():
     title = "Sample"
     if request.method == 'POST':
-    	jdata = read_json("testjson.json")
+    	print request.form['name']
+    	jdata = be.search_api(request.form['name'])
     	return render_template('index.html',
                            message=jdata, title=title)
     else:
