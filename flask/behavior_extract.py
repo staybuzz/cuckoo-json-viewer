@@ -14,18 +14,7 @@ class BehaviorExtract(object):
 
     def get_behavior(self):
         """
-        timeをキー、API Call情報を格納した配列を値とする辞書を返す。
-        ex)
-        {1475696859.157233: [u'NtClose', {u'handle': u'0x00000074'}, 1, 0],
-         1475696859.251233: [u'LdrGetDllHandle',
-                            {u'module_address': u'0x00000000',
-                             u'module_name': u'UnlockUntangling'},
-                             0,
-                             3221225781L],
-        ...} 
-
-        memo: 以下のようなリスト形式にしたほうがいいか？
-        (timeは重複がありえるためキーとして扱えない)
+        辞書型のAPI Call情報を格納した配列を値とする辞書を返す。
         [ {'time': 1475696859.157233, 'apiname': 'NtClose', 'arguments': {'arg1': 'value1', ...}, 'status': 1, 'return_value': 0},
           {'time': 1475696859.251233, 'apiname': 'LdrGetDllHandle', 'arguments': {'arg1': 'value1', ...}, 'status': 1, 'return_value': 0}, ...]
         """
