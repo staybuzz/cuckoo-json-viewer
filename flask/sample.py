@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
-import numpy as np
 import simplejson as json
 import datetime
+from behavior_extract import BehaviorExtract
 
 app = Flask(__name__)
+be = BehaviorExtract()
 
 def read_json(filename):
 	f = open(filename, 'r')
@@ -29,7 +30,7 @@ def converttime(unixtime):
 @app.route('/')
 def index():
     title = "Sample"
-    jdata = read_json("testjson.json")
+    jdata = be.get_behavior()
     return render_template('index.html',
                            message=jdata, title=title)
 
