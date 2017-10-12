@@ -21,7 +21,7 @@ class BehaviorExtract(object):
         """
 
         # json1 collectionの取得
-        col = self.db.json1 #test json
+        col = self.db.json2 #test json
 
         # api callsの取得
         calls_path = "behavior.processes.calls"
@@ -67,6 +67,6 @@ class BehaviorExtract(object):
         # TODO: ちゃんとMongoDBのクエリから取得できるようにしたい
 
         calls = self.get_behavior()
-        results = [call for call in calls if call['apiname'] == apiname]
+        results = [call for call in calls if apiname.lower() in call['apiname'].lower()]
 
         return results

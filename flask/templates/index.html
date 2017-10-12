@@ -17,6 +17,7 @@
         <thead class="thead-default">
         <tr><th>time</th><th>category</th><th>api</th><th>arguments</th><th>status</th><th>value</th></tr> </thead>
         <tbody>
+        {% for behavior in message %}
         <tr>
         {% if behavior['arguments']|string()|length < 100 %}
           <td>{{ behavior['time'] }}</td><td>{{ behavior['category'] }}</td> <td><a href= {{ behavior['apiurl'] }} target="_blank">{{ behavior['apiname'] }}</a></td> <td>{{ behavior['arguments'] }}</td> <td>{{ behavior['status'] }}</td><td>{{ behavior['value'] }}</td>
@@ -24,10 +25,10 @@
           <td>{{ behavior['time'] }}</td><td>{{ behavior['category'] }}</td> <td><a href= {{ behavior['apiurl'] }} target="_blank" >{{ behavior['apiname'] }}</a></td> 
           <td>
             <div onclick="obj=document.getElementById( {{ loop.index0 }} ).style; obj.display=(obj.display=='none')?'block':'none';">
-            <a style="cursor:pointer;color:#555555;border-bottom: solid 1px #555555;">details...</a>
+            <a style="cursor:pointer;color:#555555;border-bottom: solid 1px #555555;">details...</a></div>
             <div id= {{ loop.index0 }} style="display:none;clear:both;">
               {{ behavior['arguments'] }}
-            </div>
+            <!-- </div> -->
             </div>
           </td> 
           <td>{{ behavior['status'] }}</td><td>{{ behavior['value'] }}</td>
