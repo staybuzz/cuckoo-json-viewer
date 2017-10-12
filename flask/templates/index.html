@@ -7,11 +7,24 @@
       <div class="header">
         <h3 class="text-muted">Sample</h3>
       </div>
+
         <form action="/post" method="post" class="form-inline">
           <label for="name">検索</label>
           <input type="text" class="form-control" id="name" name="name" placeholder="">
           <button type="submit" class="btn btn-default">Search</button>
         </form>
+
+
+      <br>
+      <form action="/hoge" method="get">
+      <a href="localhost:5000/hoge?category=network&apiname=" target="_new"><button type="button" class="btn btn-default">Network</button></a>
+      <a href="localhost:5000/hoge?category=filesystem&apiname="><button type="button" class="btn btn-primary">Filesystem</button></a>
+      <a href="localhost:5000/hoge?category=registry&apiname="><button type="button" class="btn btn-success">Registry</button></a>
+      <a href="localhost:5000/hoge?category=process&apiname="><button type="button" class="btn btn-info">Process</button></a>
+      <a href="localhost:5000/hoge?category=services&apiname="><button type="button" class="btn btn-warning">Services</button></a>
+      <a href="localhost:5000/hoge?category=synchronization&apiname="><button type="button" class="btn btn-danger">Synchronization</button></a>
+      </form>
+      <br>
 
       <table class="table-hover">
         <thead class="thead-default">
