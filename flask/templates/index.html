@@ -20,13 +20,13 @@
         {% for behavior in message %}
         <tr>
         {% if behavior['arguments']|string()|length < 100 %}
-          <td>{{ behavior['time'] }}</td> <td><a href= {{ behavior['apiurl'] }}>{{ behavior['apiname'] }}</a></td> <td>{{ behavior['arguments'] }}</td> <td>{{ behavior['status'] }}</td><td>{{ behavior['value'] }}</td>
+          <td>{{ behavior['time'] }}</td> <td><a href= {{ behavior['apiurl'] }} target="_blank">{{ behavior['apiname'] }}</a></td> <td>{{ behavior['arguments'] }}</td> <td>{{ behavior['status'] }}</td><td>{{ behavior['value'] }}</td>
         {% else %}
           <td>{{ behavior['time'] }}</td> <td><a href= {{ behavior['apiurl'] }}>{{ behavior['apiname'] }}</a></td> 
           <td>
-            <div onclick="obj=document.getElementById( {{ behavior['time'] }} ).style; obj.display=(obj.display=='none')?'block':'none';">
+            <div onclick="obj=document.getElementById( {{ loop.index0 }} ).style; obj.display=(obj.display=='none')?'block':'none';">
             <a style="cursor:pointer;color:#555555;border-bottom: solid 1px #555555;">details...</a>
-            <div id= {{ behavior['time'] }} style="display:none;clear:both;">
+            <div id= {{ loop.index0 }} style="display:none;clear:both;">
               {{ behavior['arguments'] }}
             </div>
             </div>
