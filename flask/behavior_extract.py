@@ -2,6 +2,7 @@
 
 from pymongo import MongoClient
 from pprint import pprint
+import datetime
 
 class BehaviorExtract(object):
     def __init__(self, dbaddr='localhost', dbport=27017, dbname='mws'):
@@ -38,7 +39,7 @@ class BehaviorExtract(object):
                     continue
                 calls = process['calls']
                 for call in calls:
-                    calls_all.append({'time': call['time'],
+                    calls_all.append({'time': datetime.datetime.fromtimestamp(call['time']),
                                       'category': call['category'],
                                       'apiname': call['api'],
                                       'apiurl': self.get_api_refurl(call['api']),
