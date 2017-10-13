@@ -3,6 +3,7 @@
 from pymongo import MongoClient
 from pprint import pprint
 import datetime
+import bson
 
 class BehaviorExtract(object):
     def __init__(self, dbaddr='localhost', dbport=27017, dbname='mws'):
@@ -60,17 +61,32 @@ class BehaviorExtract(object):
         else:
             return "https://www.google.com/search?q=%s" % apiname
 
-    def search_api(self, apiname='', categoryname=''):
+    def search_api(self, query='', categoryname=''):
         """
-        DBから与えられたAPI名を抽出する。
+        与えられたAPI名と引数を検索する。
         """
         # TODO: ちゃんとMongoDBのクエリから取得できるようにしたい
 
         calls = self.get_behavior()
 
         results = []
-        if apiname:
-            results = [call for call in calls if apiname.lower() in call['apiname'].lower()]
+        append = results.append # あらかじめappend()を呼び出してオーバーヘッドを抑える
+        if query:
+            # API名と引数を対象に検索
+            for call in calls:
+                res = []
+
+                # API名
+                if query.lower() in call['apiname'].lower():
+                    append(call)
+
+                # 引数
+                for k,v in call['arguments'].items():
+                    if type(v) in [int, float, bson.int64.Int64] :
+                        v = str(v)
+                    if query.lower() in v.lower():
+                        append(call)
+                        break
 
         if categoryname:
             if results:
@@ -78,7 +94,7 @@ class BehaviorExtract(object):
             else:
                 results = [call for call in calls if categoryname.lower() == call['category'].lower()]
 
-        if (not apiname) and (not categoryname):
+        if (not query) and (not categoryname):
             return calls
 
         return results
