@@ -8,21 +8,20 @@
         <h3 class="text-muted">Sample</h3>
       </div>
 
-        <form action="/post" method="post" class="form-inline">
+      <form action="/post" method="get">
+        <div class="form-inline">
           <label for="name">検索</label>
-          <input type="text" class="form-control" id="name" name="name" placeholder="">
+          <input type="text" class="form-control" id="name" name="apiname" placeholder="">
           <button type="submit" class="btn btn-default">Search</button>
-        </form>
+        </div>
+        <br>
 
-
-      <br>
-      <form action="/hoge" method="get">
-      <a href="localhost:5000/hoge?category=network&apiname=" target="_new"><button type="button" class="btn btn-default">Network</button></a>
-      <a href="localhost:5000/hoge?category=filesystem&apiname="><button type="button" class="btn btn-primary">Filesystem</button></a>
-      <a href="localhost:5000/hoge?category=registry&apiname="><button type="button" class="btn btn-success">Registry</button></a>
-      <a href="localhost:5000/hoge?category=process&apiname="><button type="button" class="btn btn-info">Process</button></a>
-      <a href="localhost:5000/hoge?category=services&apiname="><button type="button" class="btn btn-warning">Services</button></a>
-      <a href="localhost:5000/hoge?category=synchronization&apiname="><button type="button" class="btn btn-danger">Synchronization</button></a>
+        <button type="submit" name="category" value="network" class="btn btn-default">Network</button>
+        <button type="submit" name="category" value="file" class="btn btn-primary">Filesystem</button></a>
+        <button type="submit" name="category" value="registry" class="btn btn-success">Registry</button></a>
+        <button type="submit" name="category" value="process" class="btn btn-info">Process</button></a>
+        <button type="submit" name="category" value="services" class="btn btn-warning">Services</button></a>
+        <button type="submit" name="category" value="synchronization" class="btn btn-danger">Synchronization</button></a>
       </form>
       <br>
 
@@ -33,7 +32,7 @@
         {% for behavior in message %}
         <tr>
         {% if behavior['arguments']|string()|length < 100 %}
-          <td>{{ behavior['time'] }}</td><td>{{ behavior['category'] }}</td> <td><a href= {{ behavior['apiurl'] }} target="_blank">{{ behavior['apiname'] }}</a></td> <td>{{ behavior['arguments'] }}</td> <td>{{ behavior['status'] }}</td><td>{{ behavior['value'] }}</td>
+          <td>{{ behavior['time'] }}</td><td>{{ behavior['category'] }}</td> <td><a href= {{ behavior['apiurl'] }} target="_blank">{{ behavior['apiname'] }}</a></td> <td>{{ behavior['arguments'] }}</td> <td>{{ behavior['status'] }}</td><td>{{ behavior['return_value'] }}</td>
         {% else %}
           <td>{{ behavior['time'] }}</td><td>{{ behavior['category'] }}</td> <td><a href= {{ behavior['apiurl'] }} target="_blank" >{{ behavior['apiname'] }}</a></td> 
           <td>

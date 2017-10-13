@@ -21,7 +21,7 @@ class BehaviorExtract(object):
         """
 
         # json1 collectionの取得
-        col = self.db.json2 #test json
+        col = self.db.json1 #test json
 
         # api callsの取得
         calls_path = "behavior.processes.calls"
@@ -60,13 +60,25 @@ class BehaviorExtract(object):
         else:
             return "https://www.google.com/search?q=%s" % apiname
 
-    def search_api(self, apiname):
+    def search_api(self, apiname='', categoryname=''):
         """
         DBから与えられたAPI名を抽出する。
         """
         # TODO: ちゃんとMongoDBのクエリから取得できるようにしたい
 
         calls = self.get_behavior()
-        results = [call for call in calls if apiname.lower() in call['apiname'].lower()]
+
+        results = []
+        if apiname:
+            results = [call for call in calls if apiname.lower() in call['apiname'].lower()]
+
+        if categoryname:
+            if results:
+                results = [call for call in results if categoryname.lower() == call['category'].lower()]
+            else:
+                results = [call for call in calls if categoryname.lower() == call['category'].lower()]
+
+        if (not apiname) and (not categoryname):
+            return calls
 
         return results

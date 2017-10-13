@@ -43,7 +43,9 @@ def post():
     	return render_template('index.html',
                            message=jdata, title=title)
     else:
-        return redirect(url_for('index'))
+        jdata = be.search_api(request.args.get('apiname'), request.args.get('category'))
+        return render_template('index.html',
+                           message=jdata, title=title)
 
 if __name__ == '__main__':
     app.debug = True 
