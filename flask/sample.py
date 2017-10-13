@@ -34,18 +34,12 @@ def index():
     return render_template('index.html',
                            message=jdata, title=title)
 
-@app.route('/post', methods=['GET', 'POST'])
-def post():
+@app.route('/search', methods=['GET', 'POST'])
+def search():
     title = "Sample"
-    if request.method == 'POST':
-        print request.form['name']
-        jdata = be.search_api(request.form['name'])
-        return render_template('index.html',
-                           message=jdata, title=title)
-    else:
-        jdata = be.search_api(request.args.get('apiname'), request.args.get('category'))
-        return render_template('index.html',
-                           message=jdata, title=title)
+    jdata = be.search_api(request.args.get('apiname'), request.args.get('category'))
+    return render_template('index.html',
+                       message=jdata, title=title)
 
 if __name__ == '__main__':
     app.debug = True 
