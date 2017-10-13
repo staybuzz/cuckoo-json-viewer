@@ -37,7 +37,7 @@ def index():
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     title = "Sample"
-    jdata = be.search_api(request.args.get('apiname'), request.args.get('category'))
+    jdata = be.search_api(request.args.get('query'), request.args.get('category'))
     return render_template('index.html',
                        message=jdata, title=title)
 
