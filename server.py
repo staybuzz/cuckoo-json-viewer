@@ -12,9 +12,10 @@ be = BehaviorExtract()
 def favicon():
     abort(404)
 
-@app.route('/')
-def upload_json(status=''):
+@app.route('/', methods=['GET'])
+def upload_json():
     title = "cuckoo-json-viewer"
+    status = request.args.get('status')
     jsonlist = be.get_jsonlist()
     return render_template('import.html',
                            message=jsonlist, title=title, status=status)
