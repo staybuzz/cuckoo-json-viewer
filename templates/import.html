@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block content %}
+
+{% if status=='ng' %}
+<div class="error">
+  jsonファイルの読み込みに失敗しました。
+</div>
+{% endif %}
+<div class="form">
+  <div class="container">
+    <div class="header">
+      <h3 class="text-muted">Sample</h3>
+    </div>
+
+    <form action="/import" method="post" enctype="multipart/form-data">
+      <div class="form-inline">
+        <label for="name">json path</label>
+        <input type="file" class="form-control" id="jsonfile" name="jsonfile">
+        <button type="submit" class="btn btn-default">Submit</button>
+      </div>
+      <br>
+    </form>
+
+    <table class="table-hover">
+      <thead class="thead-default">
+        <tr><th>time</th><th>filename</th><th>sample_hash(sha256)</th>
+      </thead>
+      <tbody>
+      {% for jsoninfo in message %}
+        <tr>
+          <td>{{ jsoninfo['time'] }}</td><td><a href='{{ jsoninfo['id'] }}'>{{ jsoninfo['filename'] }}</a></td><td>{{ jsoninfo['samplehash'] }}</td> 
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

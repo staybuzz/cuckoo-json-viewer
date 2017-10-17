@@ -5,10 +5,10 @@
 <div class="form">
   <div class="container">
       <div class="header">
-        <h3 class="text-muted">Sample</h3>
+        <h3 class="text-muted">{{ title }}</h3>
       </div>
 
-      <form action="/search" method="get">
+      <form action="/{{ jsonid }}/search" method="get">
         <div class="form-inline">
           <label for="name">検索</label>
           <input type="text" class="form-control" id="name" name="query" placeholder="">

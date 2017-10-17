@@ -2,8 +2,10 @@
 
 from pymongo import MongoClient
 from pprint import pprint
-import datetime
+from datetime import datetime
 import bson
+import json
+import hashlib
 
 class BehaviorExtract(object):
     def __init__(self, dbaddr='localhost', dbport=27017, dbname='mws'):
@@ -14,15 +16,50 @@ class BehaviorExtract(object):
         self.apirefs = list(self.db.apiref.find())[0] # MongoDBに合わせたjsonに変更する？
 
 
-    def get_behavior(self):
+    def get_jsonlist(self):
+        col = self.db['filelist']
+        jsonlist = col.find({})
+        return jsonlist
+
+
+    def get_jsonname(self, jsonid):
+        col = self.db['filelist']
+        jsonlist = list(col.find({'id': jsonid}))
+        if jsonlist:
+            return jsonlist[0]['filename']
+        else:
+            return "Sample"
+
+    def import_json(self, req_json, jsonname):
+        try:
+            jdata = json.load(req_json)
+            jsonid = hashlib.md5(json.dumps(jdata, sort_keys=True)).hexdigest()[0:16]
+            if not list(self.db['filelist'].find({'id': jsonid})): # 同じjsonファイル既にが読み込まれているか確認
+                self.db[jsonid].insert_one(jdata)
+
+            samplehash = jdata['target']['file']['sha256']
+            date = datetime.now().isoformat()
+            self.db['filelist'].insert_one({'id': jsonid,
+                                            'filename': jsonname,
+                                            'samplehash': samplehash,
+                                            'time': date})
+
+            return (jsonid, True)
+
+        except: # if error
+            import traceback
+            traceback.print_exc()
+            return (None, False)
+
+    def get_behavior(self, jsonid):
         """
         辞書型のAPI Call情報を格納した配列を値とする辞書を返す。
         [ {'time': 1475696859.157233, 'apiname': 'NtClose', 'arguments': {'arg1': 'value1', ...}, 'status': 1, 'return_value': 0},
           {'time': 1475696859.251233, 'apiname': 'LdrGetDllHandle', 'arguments': {'arg1': 'value1', ...}, 'status': 1, 'return_value': 0}, ...]
         """
 
-        # json1 collectionの取得
-        col = self.db.json1 #test json
+        # TODO エラー処理
+        col = self.db[jsonid]
 
         # api callsの取得
         calls_path = "behavior.processes.calls"
@@ -40,7 +77,7 @@ class BehaviorExtract(object):
                     continue
                 calls = process['calls']
                 for call in calls:
-                    calls_all.append({'time': datetime.datetime.fromtimestamp(call['time']),
+                    calls_all.append({'time': datetime.fromtimestamp(call['time']),
                                       'category': call['category'],
                                       'apiname': call['api'],
                                       'apiurl': self.get_api_refurl(call['api']),
@@ -61,13 +98,14 @@ class BehaviorExtract(object):
         else:
             return "https://www.google.com/search?q=%s" % apiname
 
-    def search_api(self, query='', categoryname=''):
+
+    def search_api(self, jsonid, query='', categoryname=''):
         """
         与えられたAPI名と引数を検索する。
         """
         # TODO: ちゃんとMongoDBのクエリから取得できるようにしたい
 
-        calls = self.get_behavior()
+        calls = self.get_behavior(jsonid)
 
         results = []
         append = results.append # あらかじめappend()を呼び出してオーバーヘッドを抑える
