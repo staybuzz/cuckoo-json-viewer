@@ -119,9 +119,15 @@ class BehaviorExtract(object):
                     append(call)
 
                 # 引数
+                num_types = [int, float, bson.int64.Int64]
                 for k,v in call['arguments'].items():
-                    if type(v) in [int, float, bson.int64.Int64] :
+                    if type(v) is dict: # 引数の中にさらにdictがある場合
+                        vl = list(v.values())
+                        vl = list(map(lambda x: str(x) if type(x) in num_types else x, vl))
+                        v = '|'.join(vl)
+                    elif type(v) in num_types:
                         v = str(v)
+
                     if query.lower() in v.lower():
                         append(call)
                         break
