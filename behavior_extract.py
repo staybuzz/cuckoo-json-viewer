@@ -74,7 +74,6 @@ class BehaviorExtract(object):
 
         if pid:
             # 第一引数でpid検索し、第二引数ではprocessesリストから該当の要素のみを取り出す
-            print type(pid)
             data = col.find({"behavior.processes.pid": int(pid)}, {"behavior.processes.$":1})
             data = list(data)[0]
         else:

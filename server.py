@@ -25,9 +25,6 @@ def upload_json():
 def index(jsonid, pid=0):
     jdata = be.get_behavior(jsonid, pid)
     pinfos = be.get_processinfo(jsonid)
-    print 'type'
-    print type(pinfos[0]['pid'])
-    print type(pid)
     return render_template('index.html',
                            message=jdata, title=be.get_jsonname(jsonid), jsonid=jsonid, pid=int(pid), pinfos=pinfos)
 
