@@ -30,6 +30,14 @@ class BehaviorExtract(object):
         else:
             return "Sample"
 
+
+    def get_processinfo(self, jsonid):
+        col = self.db[jsonid]
+        res = col.find({}, {"behavior.processes.pid":1, "behavior.processes.process_name":1}) # pidはunicode型
+        res = list(res)[0]['behavior']['processes']
+        return res
+
+
     def import_json(self, req_json, jsonname):
         try:
             jdata = json.load(req_json)
@@ -51,7 +59,7 @@ class BehaviorExtract(object):
             traceback.print_exc()
             return (None, False)
 
-    def get_behavior(self, jsonid):
+    def get_behavior(self, jsonid, pid=0):
         """
         辞書型のAPI Call情報を格納した配列を値とする辞書を返す。
         [ {'time': 1475696859.157233, 'apiname': 'NtClose', 'arguments': {'arg1': 'value1', ...}, 'status': 1, 'return_value': 0},
@@ -62,33 +70,38 @@ class BehaviorExtract(object):
         col = self.db[jsonid]
 
         # api callsの取得
-        calls_path = "behavior.processes.calls"
         calls_all = []
 
-        for i in col.find():
-            data = i
-        
-            # for debug
-            #pprint(i)
-            #print data['behavior']['processes'][1]['calls'][0].keys()
+        if pid:
+            # 第一引数でpid検索し、第二引数ではprocessesリストから該当の要素のみを取り出す
+            print type(pid)
+            data = col.find({"behavior.processes.pid": int(pid)}, {"behavior.processes.$":1})
+            data = list(data)[0]
+        else:
+            data =  col.find()
+            data = list(data)[0]
 
-            for process in data['behavior']['processes']:
-                if not process['calls']: # callsになにも格納されていないとき
-                    continue
-                calls = process['calls']
-                pid = process['pid']
-                pname = process['process_name']
-                for call in calls:
-                    calls_all.append({'time': datetime.fromtimestamp(call['time']),
-                                      'category': call['category'],
-                                      'apiname': call['api'],
-                                      'apiurl': self.get_api_refurl(call['api']),
-                                      'arguments': call['arguments'],
-                                      'status': call['status'],
-                                      'return_value': call['return_value'],
-                                      'pid': pid,
-                                      'process_name': pname}
-                                    )
+        # for debug
+        #pprint(i)
+        #print data['behavior']['processes'][1]['calls'][0].keys()
+
+        for process in data['behavior']['processes']:
+            if not process['calls']: # callsになにも格納されていないとき
+                continue
+            calls = process['calls']
+            pid = process['pid']
+            pname = process['process_name']
+            for call in calls:
+                calls_all.append({'time': datetime.fromtimestamp(call['time']),
+                                  'category': call['category'],
+                                  'apiname': call['api'],
+                                  'apiurl': self.get_api_refurl(call['api']),
+                                  'arguments': call['arguments'],
+                                  'status': call['status'],
+                                  'return_value': call['return_value'],
+                                  'pid': pid,
+                                  'process_name': pname}
+                                )
 
         return calls_all
 
@@ -103,13 +116,13 @@ class BehaviorExtract(object):
             return "https://www.google.com/search?q=%s" % apiname
 
 
-    def search_api(self, jsonid, query='', categoryname=''):
+    def search_api(self, jsonid, query='', categoryname='', pid=0):
         """
         与えられたAPI名と引数を検索する。
         """
         # TODO: ちゃんとMongoDBのクエリから取得できるようにしたい
 
-        calls = self.get_behavior(jsonid)
+        calls = self.get_behavior(jsonid, pid)
 
         results = []
         append = results.append # あらかじめappend()を呼び出してオーバーヘッドを抑える

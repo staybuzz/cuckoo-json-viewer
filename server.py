@@ -21,16 +21,23 @@ def upload_json():
                            message=jsonlist, title=title, status=status)
 
 @app.route('/<jsonid>')
-def index(jsonid):
-    jdata = be.get_behavior(jsonid)
+@app.route('/<jsonid>/<pid>')
+def index(jsonid, pid=0):
+    jdata = be.get_behavior(jsonid, pid)
+    pinfos = be.get_processinfo(jsonid)
+    print 'type'
+    print type(pinfos[0]['pid'])
+    print type(pid)
     return render_template('index.html',
-                           message=jdata, title=be.get_jsonname(jsonid), jsonid=jsonid)
+                           message=jdata, title=be.get_jsonname(jsonid), jsonid=jsonid, pid=int(pid), pinfos=pinfos)
 
 @app.route('/<jsonid>/search', methods=['GET'])
-def search(jsonid):
-    jdata = be.search_api(jsonid, request.args.get('query'), request.args.get('category'))
+@app.route('/<jsonid>/<pid>/search', methods=['GET'])
+def search(jsonid, pid=0):
+    jdata = be.search_api(jsonid, request.args.get('query'), request.args.get('category'), pid)
+    pinfos = be.get_processinfo(jsonid)
     return render_template('index.html',
-                       message=jdata, title=be.get_jsonname(jsonid), jsonid=jsonid)
+                       message=jdata, title=be.get_jsonname(jsonid), jsonid=jsonid, pid=int(pid), pinfos=pinfos)
 
 @app.route('/import', methods=['POST'])
 def json_import():
