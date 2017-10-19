@@ -76,6 +76,8 @@ class BehaviorExtract(object):
                 if not process['calls']: # callsになにも格納されていないとき
                     continue
                 calls = process['calls']
+                pid = process['pid']
+                pname = process['process_name']
                 for call in calls:
                     calls_all.append({'time': datetime.fromtimestamp(call['time']),
                                       'category': call['category'],
@@ -83,7 +85,9 @@ class BehaviorExtract(object):
                                       'apiurl': self.get_api_refurl(call['api']),
                                       'arguments': call['arguments'],
                                       'status': call['status'],
-                                      'return_value': call['return_value']}
+                                      'return_value': call['return_value'],
+                                      'pid': pid,
+                                      'process_name': pname}
                                     )
 
         return calls_all
