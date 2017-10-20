@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="form">
+  <div class="container">
+    <div class="header">
+      <h3 class="text-muted">Behavior Summary</h3>
+    </div>
+
+    <div id='summary'>
+      <ul class="nav nav-tabs">
+        {% for summary_key in message.keys() %}
+        <li><a href="#{{ summary_key }}" data-toggle="tab">{{ summary_key  }}</a></li>
+        {% endfor %}
+      </ul>
+
+      <div class="tab-content">
+        {% for key, values in message.items() %}
+        <div class="tab-pane" id="{{ key }}">
+          <table class="table-hover">
+            <tbody>
+              {% for value in values %}
+              <tr><td>{{ value }}</td></td>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

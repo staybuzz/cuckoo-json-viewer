@@ -42,6 +42,11 @@ def json_import():
     else:
         return redirect(url_for('upload_json', status='ng'))
 
+@app.route('/<jsonid>/behavior_summary')
+def behavior_summary(jsonid):
+    b_sum = be.get_behavior_summary(jsonid)
+    return render_template('behavior_summary.html',
+                           jsonid=jsonid, message=b_sum)
 
 if __name__ == '__main__':
     app.debug = True 
