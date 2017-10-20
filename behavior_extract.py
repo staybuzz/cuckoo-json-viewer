@@ -158,3 +158,11 @@ class BehaviorExtract(object):
             return calls
 
         return results
+
+    def get_behavior_summary(self, jsonid):
+        col = self.db[jsonid]
+        b_sum = col.find({}, {"behavior.summary":1, "_id":0})
+        b_sum = list(b_sum)[0]['behavior']['summary']
+        pprint(b_sum)
+
+        return b_sum
