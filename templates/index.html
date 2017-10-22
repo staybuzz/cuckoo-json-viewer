@@ -8,6 +8,22 @@
         <h3 class="text-muted">{{ title }}</h3>
       </div>
 
+ <div class="row" style="padding:80px 0 0 0">
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Menu
+                </div>
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="active"><a href="/{{ jsonid }}"><i class="glyphicon glyphicon-pencil"></i>API Calls</a></li>
+                    <li><a href="/{{ jsonid }}/behavior_summary"><i class="glyphicon glyphicon-download"></i>Behavior Summary</a></li>
+                </ul> 
+                <!-- </div> -->
+            </div>
+        </div>
+
+
+      <div class="col-md-9">
       {% if not pid==0 %}
       <form action="/{{ jsonid }}/{{ pid }}/search" method="get">
       {% else %}
@@ -68,6 +84,8 @@
         {% endfor %}
         </tbody>
       </table>
+</div>
   </div>
+</div>
 </div>
 {% endblock %}
