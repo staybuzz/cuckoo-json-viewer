@@ -6,19 +6,19 @@
       <h3 class="text-muted">Behavior Summary</h3>
     </div>
 
-    <div id='summary'>
-      <ul class="nav nav-tabs">
-        {% for summary_key in message.keys() %}
-        <li><a href="#{{ summary_key }}" data-toggle="tab">{{ summary_key  }}</a></li>
+      <ul class="nav nav-pills">
+        {% for summary_key in message.keys()|sort %}
+        <li class="nav-item"><a href="#{{ summary_key }}" data-toggle="pill">{{ summary_key  }}</a></li>
         {% endfor %}
       </ul>
+      <p></p>
 
       <div class="tab-content">
-        {% for key, values in message.items() %}
+        {% for key, values in message.items()|sort %}
         <div class="tab-pane" id="{{ key }}">
           <table class="table-hover">
             <tbody>
-              {% for value in values %}
+              {% for value in values|sort %}
               <tr><td>{{ value }}</td></td>
               {% endfor %}
             </tbody>
@@ -27,6 +27,5 @@
         {% endfor %}
       </div>
     </div>
-  </div>
 </div>
 {% endblock %}
