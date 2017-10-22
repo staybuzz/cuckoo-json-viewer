@@ -20,25 +20,27 @@
         </div>
         <br>
 
-        <button type="submit" name="category" value="network" class="btn btn-default">Network</button>
+        <button type="submit" name="category" value="" class="btn btn-default">All</button>
+        <button type="submit" name="category" value="network" class="btn btn-info">Network</button>
         <button type="submit" name="category" value="file" class="btn btn-primary">Filesystem</button></a>
-        <button type="submit" name="category" value="registry" class="btn btn-success">Registry</button></a>
-        <button type="submit" name="category" value="process" class="btn btn-info">Process</button></a>
-        <button type="submit" name="category" value="services" class="btn btn-warning">Services</button></a>
+        <button type="submit" name="category" value="registry" class="btn btn-primary">Registry</button></a>
+        <button type="submit" name="category" value="process" class="btn btn-success">Process</button></a>
+        <button type="submit" name="category" value="services" class="btn btn-success">Services</button></a>
         <button type="submit" name="category" value="synchronization" class="btn btn-danger">Synchronization</button></a>
       </form>
       <br>
 
       <!-- プロセスIDとプロセス名を列挙するタブ -->
       <ul class="nav nav-tabs">
+        <li class="nav-item"><button class="btn btn-default"><a href="/{{ jsonid }}"><font color='black'>All Process</font></a></button></li>
         {% for pinfo in pinfos %}
-        <li class="nav-item">
+          <li class="nav-item">
           {% if pinfo['pid'] == pid %}
           <button class="btn btn-primary"><a href="/{{ jsonid }}/{{ pinfo['pid'] }}"><font color='white'>{{ pinfo['pid'] }} - {{ pinfo['process_name'] }}</font></a></button>
           {% else %}
           <button class="btn btn-default"><a href="/{{ jsonid }}/{{ pinfo['pid'] }}"><font color='black'>{{ pinfo['pid'] }} - {{ pinfo['process_name'] }}</font></a></button>
           {% endif %}
-        </li>
+          </li>
         {% endfor %}
       </ul>
 
